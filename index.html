@@ -6,7 +6,7 @@
 <title>Construtecn — Administração e Execução de Obras e Reformas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500&family=Sacramento&display=swap" rel="stylesheet">
 <style>
   :root{--ink:#0c0c0d;--paper:#ffffff;--mist:rgba(255,255,255,.66);--faint:rgba(255,255,255,.42);--line:rgba(255,255,255,.20);--pad:clamp(20px,4.5vw,60px);--slant:clamp(48px,8vw,140px)}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -186,6 +186,25 @@
     .res__row.rev .res__media{order:0}
     .contact__grid{grid-template-columns:1fr;gap:44px}
   }
+
+  /* ---------- RESERVA DAS ÁGUAS (destaque de empreendimento) ---------- */
+  .reserva{position:relative;min-height:88svh;display:flex;align-items:center;overflow:hidden;background:#333729;isolation:isolate;padding:clamp(80px,14vh,150px) var(--pad)}
+  .reserva__bg{position:absolute;inset:0;z-index:-2;background:url("assets/reserva/img-01-ce4b786d.jpg") center 42%/cover no-repeat;transform:scale(1.06);animation:resdrift 24s ease-out forwards}
+  @keyframes resdrift{to{transform:scale(1)}}
+  .reserva__scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(51,55,41,.58) 0%,rgba(51,55,41,.30) 36%,rgba(51,55,41,.52) 72%,rgba(51,55,41,.86) 100%),linear-gradient(90deg,rgba(51,55,41,.55) 0%,rgba(51,55,41,0) 62%)}
+  .reserva__inner{position:relative;z-index:1;max-width:1300px;width:100%;margin:0 auto}
+  .reserva__kick{font-family:'Outfit','Jost',sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#eadfc8;margin-bottom:clamp(20px,4vh,34px)}
+  .reserva__pre{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,2.4vw,1.8rem);color:#f0c9a0;line-height:1;margin-bottom:-.12em}
+  .reserva__title{font-family:'Sacramento',cursive;font-weight:400;font-size:clamp(4rem,12vw,9rem);line-height:.92;color:#fbf7ee;letter-spacing:.01em}
+  .reserva__lead{font-family:'Outfit','Jost',sans-serif;font-weight:300;font-size:clamp(1.02rem,1.5vw,1.2rem);line-height:1.7;color:rgba(251,247,238,.88);max-width:46ch;margin-top:clamp(20px,3vh,30px)}
+  .reserva__meta{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin-top:clamp(24px,4vh,36px);font-family:'Outfit','Jost',sans-serif;font-size:14px;letter-spacing:.04em;color:#eadfc8}
+  .reserva__meta b{color:#dcb37e;font-weight:600}
+  .reserva__meta .dot{width:4px;height:4px;border-radius:50%;background:rgba(220,179,126,.7)}
+  .reserva__cta{display:inline-flex;align-items:center;gap:12px;margin-top:clamp(32px,5vh,46px);padding:16px 34px;background:#c39a5b;color:#2a2c23;font-family:'Outfit','Jost',sans-serif;font-size:14px;letter-spacing:.06em;border-radius:999px;transition:background .3s,transform .3s}
+  .reserva__cta:hover{background:#dcb37e;transform:translateY(-2px)}
+  .reserva__cta .arrow,.reserva__cta span{transition:transform .35s ease}
+  .reserva__cta:hover span{transform:translateX(4px)}
+  @media (prefers-reduced-motion:reduce){.reserva__bg{transform:none;animation:none}}
   </style>
 </head>
 <body>
@@ -258,6 +277,25 @@
       <img class="lb__img" alt="">
       <button class="lb__nav lb__next" type="button" aria-label="Próxima imagem">&#8250;</button>
       <div class="lb__cap"></div>
+    </div>
+  </section>
+
+  <section class="reserva" id="reserva-das-aguas" aria-label="Reserva das Águas">
+    <div class="reserva__bg" aria-hidden="true"></div>
+    <div class="reserva__scrim" aria-hidden="true"></div>
+    <div class="reserva__inner">
+      <p class="reserva__kick reveal">Construtecn · Águas Lindas de Goiás — GO</p>
+      <p class="reserva__pre reveal">Conheça o</p>
+      <h2 class="reserva__title reveal">Reserva das Águas</h2>
+      <p class="reserva__lead reveal">Três casas térreas em condomínio compacto, prontas para morar e financiáveis. 120 m², 3 quartos e 1 suíte.</p>
+      <div class="reserva__meta reveal">
+        <span><b>03</b> casas disponíveis</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>120 m²</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span>3 quartos · 1 suíte</span>
+      </div>
+      <a class="reserva__cta reveal" href="reserva-das-aguas">Conheça o empreendimento <span aria-hidden="true">&rarr;</span></a>
     </div>
   </section>
 
