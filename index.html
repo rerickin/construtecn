@@ -188,15 +188,14 @@
   }
 
   /* ---------- RESERVA DAS ÁGUAS (destaque de empreendimento) ---------- */
-  .reserva{position:relative;min-height:88svh;display:flex;align-items:center;overflow:hidden;background:#333729;isolation:isolate;padding:clamp(80px,14vh,150px) var(--pad)}
-  .reserva__bg{position:absolute;inset:0;z-index:-2;background:url("assets/reserva/img-01-ce4b786d.jpg") center 42%/cover no-repeat;transform:scale(1.06);animation:resdrift 24s ease-out forwards}
-  @keyframes resdrift{to{transform:scale(1)}}
-  .reserva__scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(51,55,41,.58) 0%,rgba(51,55,41,.30) 36%,rgba(51,55,41,.52) 72%,rgba(51,55,41,.86) 100%),linear-gradient(90deg,rgba(51,55,41,.55) 0%,rgba(51,55,41,0) 62%)}
+  .reserva{position:relative;min-height:92svh;display:flex;align-items:center;overflow:hidden;background:#333729;isolation:isolate;padding:clamp(80px,14vh,150px) var(--pad)}
+  .reserva__bg{position:absolute;left:0;right:0;top:-14%;height:128%;z-index:-2;background:url("assets/reserva/img-01-ce4b786d.jpg") center 60%/cover no-repeat;will-change:transform}
+  .reserva__scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(51,55,41,.52) 0%,rgba(51,55,41,.24) 34%,rgba(51,55,41,.50) 70%,rgba(51,55,41,.88) 100%),linear-gradient(90deg,rgba(51,55,41,.58) 0%,rgba(51,55,41,0) 60%)}
   .reserva__inner{position:relative;z-index:1;max-width:1300px;width:100%;margin:0 auto}
-  .reserva__kick{font-family:'Outfit','Jost',sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#eadfc8;margin-bottom:clamp(20px,4vh,34px)}
-  .reserva__pre{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,2.4vw,1.8rem);color:#f0c9a0;line-height:1;margin-bottom:-.12em}
-  .reserva__title{font-family:'Sacramento',cursive;font-weight:400;font-size:clamp(4rem,12vw,9rem);line-height:.92;color:#fbf7ee;letter-spacing:.01em}
-  .reserva__lead{font-family:'Outfit','Jost',sans-serif;font-weight:300;font-size:clamp(1.02rem,1.5vw,1.2rem);line-height:1.7;color:rgba(251,247,238,.88);max-width:46ch;margin-top:clamp(20px,3vh,30px)}
+  .reserva__kick{font-family:'Outfit','Jost',sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#eadfc8;margin-bottom:clamp(18px,3.4vh,30px)}
+  .reserva__pre{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(1.3rem,2.4vw,1.8rem);color:#f0c9a0;line-height:1;margin-bottom:.4em}
+  .reserva__logo{display:block;width:min(500px,80%);height:auto;filter:drop-shadow(0 6px 26px rgba(20,22,15,.4))}
+  .reserva__lead{font-family:'Outfit','Jost',sans-serif;font-weight:300;font-size:clamp(1.02rem,1.5vw,1.2rem);line-height:1.7;color:rgba(251,247,238,.88);max-width:46ch;margin-top:clamp(22px,3.4vh,34px)}
   .reserva__meta{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin-top:clamp(24px,4vh,36px);font-family:'Outfit','Jost',sans-serif;font-size:14px;letter-spacing:.04em;color:#eadfc8}
   .reserva__meta b{color:#dcb37e;font-weight:600}
   .reserva__meta .dot{width:4px;height:4px;border-radius:50%;background:rgba(220,179,126,.7)}
@@ -204,7 +203,7 @@
   .reserva__cta:hover{background:#dcb37e;transform:translateY(-2px)}
   .reserva__cta .arrow,.reserva__cta span{transition:transform .35s ease}
   .reserva__cta:hover span{transform:translateX(4px)}
-  @media (prefers-reduced-motion:reduce){.reserva__bg{transform:none;animation:none}}
+  @media (prefers-reduced-motion:reduce){.reserva__bg{transform:none!important}}
   </style>
 </head>
 <body>
@@ -281,12 +280,12 @@
   </section>
 
   <section class="reserva" id="reserva-das-aguas" aria-label="Reserva das Águas">
-    <div class="reserva__bg" aria-hidden="true"></div>
+    <div class="reserva__bg" id="reservaBg" aria-hidden="true"></div>
     <div class="reserva__scrim" aria-hidden="true"></div>
     <div class="reserva__inner">
       <p class="reserva__kick reveal">Construtecn · Águas Lindas de Goiás — GO</p>
       <p class="reserva__pre reveal">Conheça o</p>
-      <h2 class="reserva__title reveal">Reserva das Águas</h2>
+      <img class="reserva__logo reveal" src="assets/reserva/img-04-deb893ad.png" alt="Reserva das Águas" width="960" height="500">
       <p class="reserva__lead reveal">Três casas térreas em condomínio compacto, prontas para morar e financiáveis. 120 m², 3 quartos e 1 suíte.</p>
       <div class="reserva__meta reveal">
         <span><b>03</b> casas disponíveis</span>
@@ -435,6 +434,26 @@
       if(em) txt+=' (E-mail para retorno: '+em+')';
       window.open('https://wa.me/5561998304660?text='+encodeURIComponent(txt),'_blank');
     });
+  })();
+
+  (function(){
+    var sec=document.getElementById('reserva-das-aguas');
+    var bg=document.getElementById('reservaBg');
+    if(!sec||!bg) return;
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var ticking=false;
+    function update(){
+      var r=sec.getBoundingClientRect();
+      var vh=window.innerHeight;
+      if(r.bottom>0 && r.top<vh){
+        var prog=(r.top+r.height/2 - vh/2)/(vh/2 + r.height/2); // -1..1
+        bg.style.transform='translate3d(0,'+(prog*-7).toFixed(2)+'%,0)';
+      }
+      ticking=false;
+    }
+    window.addEventListener('scroll',function(){if(!ticking){requestAnimationFrame(update);ticking=true;}},{passive:true});
+    window.addEventListener('resize',update);
+    update();
   })();
 </script>
 </body>
