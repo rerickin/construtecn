@@ -304,9 +304,43 @@
     .steps li.cur{font-size:9px;white-space:nowrap}
   }
   @media (prefers-reduced-motion:reduce){.bar-load span{animation:none}}
+
+  /* ---------- CONTATO INVERTIDO (fundo claro) + animação de entrada ---------- */
+  .contact-inv{--cink:#0c0c0d;--cmist:rgba(12,12,13,.66);--cfaint:rgba(12,12,13,.46);--cline:rgba(12,12,13,.16);background:#efefed;color:var(--cink);overflow:hidden;min-height:100svh;display:flex;align-items:center}
+  .contact-inv .sec__wrap{width:100%}
+  .contact-inv .sec__eye{color:var(--cmist)} .contact-inv .sec__eye .rule{background:var(--cline)}
+  .contact-inv .cblock .lbl{color:var(--cfaint)}
+  .contact-inv .cblock p,.contact-inv .cblock a{color:var(--cmist)}
+  .contact-inv .cblock a:hover{color:var(--cink);border-color:var(--cline)}
+  .contact-inv .cform input,.contact-inv .cform textarea{color:var(--cink);border-color:var(--cline);background:rgba(255,255,255,.35)}
+  .contact-inv .cform input:focus,.contact-inv .cform textarea:focus{border-color:var(--cink);background:#fff}
+  .contact-inv .cform input::placeholder,.contact-inv .cform textarea::placeholder{color:var(--cfaint)}
+  .contact-inv .cform button{background:var(--cink);color:#fff}
+  .contact-inv .cform button:hover{background:#2a2a2c}
+  .contact-inv .sec__title{font-size:clamp(2.2rem,5vw,3.8rem)}
+  /* estados da animação (só com JS ativo) */
+  .contact-inv .cx-head{width:fit-content;max-width:100%}
+  .js .cx-head{transform-origin:0 0;will-change:transform}
+  .js .contact-inv.cx-wait .cx-head{opacity:0}
+  .js .contact-inv .cx-head.cx-center{transition:opacity .9s ease,transform .9s cubic-bezier(.22,1,.36,1)}
+  .js .contact-inv .cx-head.cx-move{transition:transform 1.15s cubic-bezier(.76,0,.24,1)}
+  .js .contact-inv .cx-rest{opacity:0;transform:translateY(34px);transition:opacity .9s ease,transform 1s cubic-bezier(.22,1,.36,1)}
+  .js .contact-inv.cx-done .cx-rest{opacity:1;transform:none}
+  .js .contact-inv.cx-done .cx-d2{transition-delay:.18s}
+  .contact-inv .cform .field{opacity:1}
+  .js .contact-inv .cform .field{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
+  .js .contact-inv.cx-done .cform .field{opacity:1;transform:none}
+  .js .contact-inv.cx-done .cform .field:nth-of-type(1){transition-delay:.30s}
+  .js .contact-inv.cx-done .cform .field:nth-of-type(2){transition-delay:.38s}
+  .js .contact-inv.cx-done .cform .field:nth-of-type(3){transition-delay:.46s}
+  .js .contact-inv.cx-done .cform .field:nth-of-type(4){transition-delay:.54s}
+  .contact-inv .cx-line{display:block;height:1px;background:var(--cink);width:0;margin-top:22px;transition:width 1.1s cubic-bezier(.76,0,.24,1) .2s}
+  .contact-inv.cx-done .cx-line{width:clamp(60px,10vw,120px)}
+  @media (prefers-reduced-motion:reduce){.js .contact-inv .cx-head,.js .contact-inv .cx-rest,.js .contact-inv .cform .field{opacity:1!important;transform:none!important}}
   </style>
 </head>
 <body>
+<script>document.documentElement.classList.add('js')</script>
   <section class="hero">
     <div class="hero__bg" aria-hidden="true"></div>
     <div class="hero__veil" aria-hidden="true"></div>
@@ -535,14 +569,15 @@
     </div>
   </section>
 
-  <section class="sec sec--line" id="contato" aria-label="Contato">
+  <section class="sec contact-inv" id="contato" aria-label="Contato">
     <div class="sec__wrap">
-      <div class="sec__head reveal">
+      <div class="sec__head cx-head">
         <span class="sec__eye"><span class="rule" aria-hidden="true"></span>Contato</span>
         <h2 class="sec__title">Vamos construir juntos</h2>
+        <span class="cx-line" aria-hidden="true"></span>
       </div>
       <div class="contact__grid">
-        <div class="contact__info reveal">
+        <div class="contact__info cx-rest">
           <div class="cblock">
             <div class="lbl">Endereço</div>
             <p>Setor Industrial QI 3, Taguatinga<br>Brasília-DF · CEP 72135-030</p>
@@ -554,7 +589,7 @@
             Atendimento por telefone · 08h às 18h</p>
           </div>
         </div>
-        <form class="cform reveal" id="cform" novalidate>
+        <form class="cform cx-rest cx-d2" id="cform" novalidate>
           <div class="cblock" style="margin-bottom:22px"><div class="lbl">Envie uma mensagem</div></div>
           <div class="field"><input name="nome" type="text" placeholder="Nome" required></div>
           <div class="field"><input name="email" type="email" placeholder="E-mail"></div>
@@ -665,6 +700,40 @@
     /* clique na foto abre ampliada (quando houver imagem) */
     var lb=document.getElementById('lightbox');
     document.querySelectorAll('.slot').forEach(function(s){s.addEventListener('click',function(){var im=s.querySelector('img');if(!im||!lb)return;var li=lb.querySelector('.lb__img');li.src=im.src;li.alt=im.alt;lb.querySelector('.lb__cap').textContent=im.alt;lb.classList.add('open');lb.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';});});
+  })();
+
+  /* contato: título surge no centro, depois desliza para o canto e o resto aparece */
+  (function(){
+    var sec=document.getElementById('contato'); if(!sec) return;
+    var head=sec.querySelector('.cx-head');
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){sec.classList.add('cx-done');return;}
+    sec.classList.add('cx-wait');
+    var started=false;
+    function toCenter(){
+      head.style.transition='none'; head.style.transform='none';
+      var hr=head.getBoundingClientRect(), sr=sec.getBoundingClientRect();
+      var sc=window.innerWidth<700?1:1.32;
+      var vh=window.innerHeight;
+      var dx=(sr.left+sr.width/2)-(hr.left+hr.width*sc/2);
+      var dy=(sr.top+Math.min(sr.height,vh)/2)-(hr.top+hr.height*sc/2);
+      head.style.transform='translate('+dx+'px,'+(dy+40)+'px) scale('+sc+')';
+      return {dx:dx,dy:dy,sc:sc};
+    }
+    function start(){
+      if(started) return; started=true;
+      var c=toCenter(); void head.offsetWidth;
+      head.style.transition='';
+      sec.classList.remove('cx-wait'); head.classList.add('cx-center');
+      head.style.transform='translate('+c.dx+'px,'+c.dy+'px) scale('+c.sc+')';
+      setTimeout(function(){
+        head.classList.remove('cx-center'); head.classList.add('cx-move');
+        head.style.transform='none';
+        setTimeout(function(){sec.classList.add('cx-done');},520);
+        setTimeout(function(){head.classList.remove('cx-move');head.style.transform='';head.style.transition='';},1300);
+      },1250);
+    }
+    function check(){var r=sec.getBoundingClientRect();if(r.top<window.innerHeight*.3&&r.bottom>window.innerHeight*.5){start();window.removeEventListener('scroll',check);}}
+    window.addEventListener('scroll',check,{passive:true}); check();
   })();
 </script>
 </body>
