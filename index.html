@@ -438,6 +438,25 @@
     :root{--elastic:linear(0, .22 5%, .55 11%, .82 17%, .98 23%, 1.06 29%, 1.075 33%, 1.06 38%, 1.01 47%, .99 55%, .993 64%, 1.001 78%, 1)}
   }
   .cx-title .w{will-change:transform}
+
+  /* caminhão perfuratriz (etapa Fundação) */
+  .bld.drill{width:clamp(104px,9.5vw,136px)}
+  .bld.drill .crane path{stroke:rgba(255,255,255,.75);stroke-width:1;fill:none;stroke-linejoin:round}
+  .bld.drill .wheels circle{fill:#141415;stroke:rgba(255,255,255,.75);stroke-width:1}
+  .bld.drill .soil path{stroke:rgba(255,255,255,.22);stroke-width:1}
+  .bld.drill .hole path{stroke:rgba(255,255,255,.3);stroke-width:.8;stroke-dasharray:2 2}
+  .bld.drill .auger{transition:transform 1.6s cubic-bezier(.22,1,.36,1)}
+  .bld.drill .auger path{stroke:#fff;stroke-width:1.1;fill:none}
+  .bld.drill .auger__bit{animation:drillbuzz .16s linear infinite}
+  .bld.drill .helix{stroke-dasharray:3 1.5;animation:drillspin .5s linear infinite}
+  @keyframes drillbuzz{0%,100%{transform:translateX(0)}50%{transform:translateX(.35px)}}
+  @keyframes drillspin{to{stroke-dashoffset:-9}}
+  .bld.drill .dust circle{fill:rgba(255,255,255,.6);animation:dust 1.4s ease-out infinite}
+  .bld.drill .dust circle:nth-child(2){animation-delay:.35s}.bld.drill .dust circle:nth-child(3){animation-delay:.7s}.bld.drill .dust circle:nth-child(4){animation-delay:1.05s}
+  @keyframes dust{0%{opacity:0;transform:translateY(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-7px)}}
+  .site.ip .bld.drill .wheels,.site.ip .bld.drill .soil,.site.ip .bld.drill .hole,.site.ip .bld.drill .auger,.site.ip .bld.drill .dust{opacity:0;transition:opacity .5s ease .8s,transform 1.6s cubic-bezier(.22,1,.36,1)}
+  .site.ip.ip-go .bld.drill .wheels,.site.ip.ip-go .bld.drill .soil,.site.ip.ip-go .bld.drill .hole,.site.ip.ip-go .bld.drill .auger,.site.ip.ip-go .bld.drill .dust{opacity:1}
+  @media (prefers-reduced-motion:reduce){.bld.drill .auger__bit,.bld.drill .helix,.bld.drill .dust circle{animation:none}}
   </style>
 </head>
 <body>
@@ -781,6 +800,24 @@
       seq.forEach(function(x,k){x.classList.add('ip-item');x.style.setProperty('--d',(k<2?k*0.15:0.25+(k-2)*0.09)+'s');});
       if(!reduce) el.classList.add('ip');
     });
+
+    /* etapa Fundação: caminhão perfuratriz no lugar do prédio com guindaste */
+    var DRILL='<g class="crane">'+
+      '<path pathLength="1" d="M0 72H130"/>'+
+      '<path pathLength="1" d="M8 66V49Q8 45 12 45H24L31 55H100V66H81.5M70.5 66H65.5M54.5 66H22.5M11.5 66H8"/>'+
+      '<path pathLength="1" d="M13 48.5H22L26.5 55H13Z"/>'+
+      '<path pathLength="1" d="M100 60H104M104 66V8M111 66V8M101 8H114M104 62L111 56L104 50L111 44L104 38L111 32L104 26L111 20L104 14L111 8M44 55L104 22"/>'+
+      '</g>'+
+      '<g class="wheels"><circle cx="17" cy="66.5" r="5.5"/><circle cx="60" cy="66.5" r="5.5"/><circle cx="76" cy="66.5" r="5.5"/></g>'+
+      '<g class="soil"><path d="M4 77h7M20 81h5M34 77h8M50 82h5M64 77h7M80 81h6M92 77h5M120 78h7M116 84h5"/></g>'+
+      '<g class="hole"><path d="M102.5 72V94M112.5 72V94"/></g>'+
+      '<g class="auger"><g class="auger__bit"><path d="M107.5 2V58"/><path class="helix" d="M107.5 58L111.5 61L103.5 64.5L111.5 68L103.5 71.5L111.5 75L103.5 78.5L107.5 81"/></g></g>'+
+      '<g class="dust"><circle cx="100" cy="70" r="1"/><circle cx="115" cy="69.5" r=".8"/><circle cx="98" cy="68.5" r=".7"/><circle cx="117" cy="70.5" r=".9"/></g>';
+    sites.forEach(function(el){
+      if((+el.dataset.stage||0)!==0) return;
+      var svg=el.querySelector('.bld'); if(!svg) return;
+      svg.setAttribute('viewBox','0 0 130 96'); svg.classList.add('drill'); svg.innerHTML=DRILL;
+    });
     function load(el,dur,cb){
       var p=Math.max(0,Math.min(100,+el.dataset.progress||0));
       var bar=el.querySelector('.bar-load span'); bar.style.transitionDuration=dur+'ms'; bar.style.width=p+'%';
@@ -788,7 +825,7 @@
       var t0=null;
       function tick(t){if(!t0)t0=t;var q=dur?Math.min(1,(t-t0)/dur):1;var e=1-Math.pow(1-q,3);var v=Math.round(p*e);n.textContent=v;
         var on=Math.round(v/100*FLOORS);fls.forEach(function(f,k){f.classList.toggle('on',k<on);});
-        if(q<1)requestAnimationFrame(tick);else{if(lit<FLOORS)fls[lit].classList.add('now');cb&&cb();}}
+        if(q<1)requestAnimationFrame(tick);else{if(lit<FLOORS&&fls[lit])fls[lit].classList.add('now');var au=el.querySelector('.auger');if(au)au.style.transform='translateY('+(2+p*0.1).toFixed(1)+'px)';cb&&cb();}}
       requestAnimationFrame(tick);
     }
     function center(el){
