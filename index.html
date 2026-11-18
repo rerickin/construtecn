@@ -423,6 +423,14 @@
   .site.ip.ip-go .steps li{opacity:1;transform:none}
   .site.ip .bar-load span{transition-property:width;transition-timing-function:cubic-bezier(.22,1,.36,1)}
   @media (max-width:560px){.steps li{font-size:0} .steps li.cur{font-size:9px;white-space:nowrap}}
+
+  /* contato: palavras sobem uma a uma */
+  .cx-title .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.14em;margin-bottom:-.14em}
+  .cx-title .w>span{display:inline-block}
+  .js .contact-inv .cx-title .w>span{transform:translateY(110%);transition:transform 1s cubic-bezier(.22,1,.36,1) var(--d,0s)}
+  .js .contact-inv.cx-words .cx-title .w>span{transform:none}
+  .js .contact-inv .cx-head .sec__eye{opacity:0;transition:opacity .8s ease .05s}
+  .js .contact-inv.cx-words .cx-head .sec__eye{opacity:1}
   </style>
 </head>
 <body>
@@ -647,7 +655,7 @@
     <div class="sec__wrap">
       <div class="sec__head cx-head">
         <span class="sec__eye"><span class="rule" aria-hidden="true"></span>Contato</span>
-        <h2 class="sec__title">Vamos construir juntos</h2>
+        <h2 class="sec__title cx-title" aria-label="Vamos construir juntos"><span class="w" aria-hidden="true"><span style="--d:0.15s">Vamos</span></span> <span class="w" aria-hidden="true"><span style="--d:0.29s">construir</span></span> <span class="w" aria-hidden="true"><span style="--d:0.43s">juntos</span></span></h2>
         <span class="cx-line" aria-hidden="true"></span>
       </div>
       <div class="contact__grid">
@@ -807,7 +815,7 @@
   (function(){
     var sec=document.getElementById('contato'); if(!sec) return;
     var head=sec.querySelector('.cx-head');
-    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){sec.classList.add('cx-done');return;}
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){sec.classList.add('cx-done','cx-words');return;}
     sec.classList.add('cx-wait');
     var started=false;
     function toCenter(){
@@ -824,14 +832,14 @@
       if(started) return; started=true;
       var c=toCenter(); void head.offsetWidth;
       head.style.transition='';
-      sec.classList.remove('cx-wait'); head.classList.add('cx-center');
+      sec.classList.remove('cx-wait'); head.classList.add('cx-center'); sec.classList.add('cx-words');
       head.style.transform='translate('+c.dx+'px,'+c.dy+'px) scale('+c.sc+')';
       setTimeout(function(){
         head.classList.remove('cx-center'); head.classList.add('cx-move');
         head.style.transform='none';
         setTimeout(function(){sec.classList.add('cx-done');},520);
         setTimeout(function(){head.classList.remove('cx-move');head.style.transform='';head.style.transition='';},1300);
-      },1250);
+      },1900);
     }
     function check(){var r=sec.getBoundingClientRect();if(r.top<window.innerHeight*.3&&r.bottom>window.innerHeight*.5){start();window.removeEventListener('scroll',check);}}
     window.addEventListener('scroll',check,{passive:true}); check();
