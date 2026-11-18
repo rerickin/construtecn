@@ -393,6 +393,11 @@
   @keyframes sealspin{to{transform:rotate(360deg)}}
   @media (max-width:980px){.seal{position:relative;right:auto;top:auto;transform:none;margin:clamp(30px,5vh,44px) auto 0;width:150px}}
   @media (prefers-reduced-motion:reduce){.seal__ring{animation:none}}
+
+  .reserva__brand{position:relative;display:block;width:min(500px,80%)}
+  .reserva__brand .reserva__logo{width:100%}
+  .reserva__brand .seal{position:absolute;right:auto;left:100%;top:-6%;transform:translateX(-28%) rotate(-12deg);margin:0;width:clamp(120px,10.5vw,158px)}
+  @media (max-width:980px){.reserva__brand .seal{width:96px;left:auto;right:-6%;top:-38%;transform:rotate(-12deg)} .reserva__brand .seal__n{font-size:1.5rem;margin:3px 0 1px} .reserva__brand .seal__kick{font-size:7.5px} .reserva__brand .seal__u{font-size:7.5px} .reserva__brand .seal__ring text{font-size:10px}}
   </style>
 </head>
 <body>
@@ -475,7 +480,16 @@
     <div class="reserva__inner">
       <p class="reserva__kick reveal">Construtecn · Águas Lindas de Goiás — GO</p>
       <p class="reserva__pre reveal">Conheça o</p>
-      <img class="reserva__logo reveal" src="assets/reserva/img-04-deb893ad.png" alt="Reserva das Águas" width="960" height="500">
+      <span class="reserva__brand reveal"><img class="reserva__logo" src="assets/reserva/img-04-deb893ad.png" alt="Reserva das Águas" width="960" height="500">
+      <a class="seal" href="#contato" aria-label="Vem aí: mais 6 unidades, Reserva das Águas 2 e 3. Fale com a gente">
+        <svg class="seal__ring" viewBox="0 0 200 200" aria-hidden="true">
+          <defs><path id="sealPath" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"/></defs>
+          <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(251,247,238,.35)" stroke-width="1"/>
+          <text><textPath href="#sealPath" textLength="505">Reserva das Águas 2 e 3 · Vem aí · Reserva das Águas 2 e 3 · Vem aí ·</textPath></text>
+        </svg>
+        <span class="seal__disc" aria-hidden="true"></span>
+        <span class="seal__in"><span class="seal__kick">Vem aí</span><span class="seal__n">+6</span><span class="seal__u">unidades</span></span>
+      </a></span>
       <p class="reserva__lead reveal">Três casas térreas em condomínio compacto, prontas para morar e financiáveis. 120 m², 3 quartos e 1 suíte.</p>
       <div class="reserva__meta reveal">
         <span><b>03</b> casas disponíveis</span>
@@ -485,15 +499,6 @@
         <span>3 quartos · 1 suíte</span>
       </div>
       <a class="reserva__cta reveal" href="reserva-das-aguas">Conheça o empreendimento <span aria-hidden="true">&rarr;</span></a>
-      <a class="seal" href="#contato" aria-label="Vem aí: mais 6 unidades, Reserva das Águas 2 e 3. Fale com a gente">
-        <svg class="seal__ring" viewBox="0 0 200 200" aria-hidden="true">
-          <defs><path id="sealPath" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"/></defs>
-          <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(251,247,238,.35)" stroke-width="1"/>
-          <text><textPath href="#sealPath" textLength="505">Reserva das Águas 2 e 3 · Vem aí · Reserva das Águas 2 e 3 · Vem aí ·</textPath></text>
-        </svg>
-        <span class="seal__disc" aria-hidden="true"></span>
-        <span class="seal__in"><span class="seal__kick">Vem aí</span><span class="seal__n">+6</span><span class="seal__u">unidades</span></span>
-      </a>
 
     </div>
   </section>
