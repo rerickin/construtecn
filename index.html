@@ -431,6 +431,13 @@
   .js .contact-inv.cx-words .cx-title .w>span{transform:none}
   .js .contact-inv .cx-head .sec__eye{opacity:0;transition:opacity .8s ease .05s}
   .js .contact-inv.cx-words .cx-head .sec__eye{opacity:1}
+
+  /* movimento elástico (mola) */
+  :root{--elastic:cubic-bezier(.34,1.3,.64,1)}
+  @supports (transition-timing-function:linear(0,1)){
+    :root{--elastic:linear(0, .22 5%, .55 11%, .82 17%, .98 23%, 1.06 29%, 1.075 33%, 1.06 38%, 1.01 47%, .99 55%, .993 64%, 1.001 78%, 1)}
+  }
+  .cx-title .w{will-change:transform}
   </style>
 </head>
 <body>
@@ -811,38 +818,47 @@
     document.querySelectorAll('.slot').forEach(function(s){s.addEventListener('click',function(){var im=s.querySelector('img');if(!im||!lb)return;var li=lb.querySelector('.lb__img');li.src=im.src;li.alt=im.alt;lb.querySelector('.lb__cap').textContent=im.alt;lb.classList.add('open');lb.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';});});
   })();
 
-  /* contato: título surge no centro, depois desliza para o canto e o resto aparece */
+  /* contato: título surge no centro (palavras subindo), depois cada palavra
+     viaja para o canto em sequência, com movimento elástico, e o resto aparece */
   (function(){
     var sec=document.getElementById('contato'); if(!sec) return;
     var head=sec.querySelector('.cx-head');
     if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){sec.classList.add('cx-done','cx-words');return;}
+    var parts=[head.querySelector('.sec__eye')].concat([].slice.call(head.querySelectorAll('.cx-title .w')));
     sec.classList.add('cx-wait');
     var started=false;
-    function toCenter(){
-      head.style.transition='none'; head.style.transform='none';
-      var hr=head.getBoundingClientRect(), sr=sec.getBoundingClientRect();
+    function place(){
+      parts.forEach(function(p){p.style.transition='none';p.style.transform='none';});
+      var hr=head.getBoundingClientRect(), sr=sec.getBoundingClientRect(), vh=window.innerHeight;
       var sc=window.innerWidth<700?1:1.32;
-      var vh=window.innerHeight;
       var dx=(sr.left+sr.width/2)-(hr.left+hr.width*sc/2);
       var dy=(sr.top+Math.min(sr.height,vh)/2)-(hr.top+hr.height*sc/2);
-      head.style.transform='translate('+dx+'px,'+(dy+40)+'px) scale('+sc+')';
-      return {dx:dx,dy:dy,sc:sc};
+      parts.forEach(function(p){
+        var r=p.getBoundingClientRect(), x=r.left-hr.left, y=r.top-hr.top;
+        p.style.transformOrigin='0 0';
+        p.style.transform='translate('+(dx+x*(sc-1)).toFixed(1)+'px,'+(dy+y*(sc-1)).toFixed(1)+'px) scale('+sc+')';
+      });
+      void head.offsetWidth;
+      parts.forEach(function(p){p.style.transition='';});
     }
     function start(){
       if(started) return; started=true;
-      var c=toCenter(); void head.offsetWidth;
-      head.style.transition='';
-      sec.classList.remove('cx-wait'); head.classList.add('cx-center'); sec.classList.add('cx-words');
-      head.style.transform='translate('+c.dx+'px,'+c.dy+'px) scale('+c.sc+')';
+      place();
+      sec.classList.remove('cx-wait'); sec.classList.add('cx-words');
       setTimeout(function(){
-        head.classList.remove('cx-center'); head.classList.add('cx-move');
-        head.style.transform='none';
-        setTimeout(function(){sec.classList.add('cx-done');},520);
-        setTimeout(function(){head.classList.remove('cx-move');head.style.transform='';head.style.transition='';},1300);
+        parts.forEach(function(p,i){
+          p.style.transition='transform 1.25s var(--elastic) '+(i*0.12).toFixed(2)+'s';
+          p.style.transform='none';
+        });
+        var total=1250+parts.length*120;
+        setTimeout(function(){sec.classList.add('cx-done');},total-500);
+        setTimeout(function(){parts.forEach(function(p){p.style.transition='';p.style.transform='';p.style.transformOrigin='';});},total+100);
       },1900);
     }
     function check(){var r=sec.getBoundingClientRect();if(r.top<window.innerHeight*.3&&r.bottom>window.innerHeight*.5){start();window.removeEventListener('scroll',check);}}
-    window.addEventListener('scroll',check,{passive:true}); check();
+    window.addEventListener('scroll',check,{passive:true});
+    window.addEventListener('resize',function(){if(!started){}});
+    check();
   })();
 </script>
 </body>
